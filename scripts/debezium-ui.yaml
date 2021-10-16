@@ -1,0 +1,64 @@
+# Debezium UI
+# https://github.com/debezium/debezium-ui
+apiVersion: v1
+kind: Service
+metadata:
+  name: debezium-service
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: debezium-service
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debezium-service-config
+data:
+  KAFKA_CONNECT_URI: http://kafka-connect-db-cluster-connect-api.strimzi-test:8083
+  # dev, prod. Only prod mode will use UI_BASE_URL
+  UI_MODE: prod
+  UI_BASE_URI: http://debezium-service/api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debezium-service
+  #annotations:
+  #  app.openshift.io/connects-to: debezium-db-pg,debezium-connect
+spec:
+  selector:
+    matchLabels:
+      app: debezium-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: debezium-service
+    spec:
+      containers:
+      - name: debezium-service
+        image: debezium/debezium-ui:latest
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: debezium-service-config
+---
+apiVersion: v1
+kind: Route
+metadata:
+  name: debezium-route
+#  annotations:
+#    haproxy.router.openshift.io/ip_whitelist: 127.0.0.1/32, 127.0.1.1/32
+spec:
+  #host: debezium.apps.cluster-e52d.e52d.example.opentlc.com
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: debezium-service
+  #tls:
+  #  termination: passthrough
+  #  insecureEdgeTerminationPolicy: Redirect
