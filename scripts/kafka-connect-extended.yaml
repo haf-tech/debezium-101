@@ -1,4 +1,4 @@
-# KafkaConnect with integraded Debezium Connectors: PostgreSQL, MySQL
+# KafkaConnect with integrated Debezium Connectors: PostgreSQL, MySQL
 #
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaConnect
@@ -29,6 +29,19 @@ spec:
           - type: tgz
             url: https://repo1.maven.org/maven2/io/debezium/debezium-connector-mysql/1.7.0.Final/debezium-connector-mysql-1.7.0.Final-plugin.tar.gz
             sha512sum: d2ad1c1adacb9121eae48b163a4af141261af7d456a837901ceb38f67bf43b274e6ad2effa08ad3b9d8eb7151ca2766770d39744ef063d03baa31cb7420a1cd4
+      - name: groovy
+        artifacts:
+          - type: jar
+            url: https://repo1.maven.org/maven2/org/codehaus/groovy/groovy/3.0.9/groovy-3.0.9.jar
+      - name: groovy-jsr223
+        artifacts:
+          - type: jar
+            url: https://repo1.maven.org/maven2/org/codehaus/groovy/groovy-jsr223/3.0.9/groovy-jsr223-3.0.9.jar
+      - name: debezium-smt-scripting
+        artifacts:
+          - type: tgz
+            url: https://repo1.maven.org/maven2/io/debezium/debezium-scripting/1.7.0.Final/debezium-scripting-1.7.0.Final.tar.gz
+            sha512sum: 360b48349ab7da6b68f91fb77eac7020989abeb756f9893a1c83d3ccd8872ef7d8b2a284cbfdcc8374bfc8cd5366ee1c74e7930cf4de331ed922fe78cf59df82
   # Set refernce to the secret of Kafka Broker, which was created by the Strimzi installation 
   # check the namespace where the Kafka Broker is running
   tls:
