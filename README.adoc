@@ -529,7 +529,7 @@ $ export BT=`ibmcloud iam oauth-tokens --output JSON | jq -r .iam_token`
 $ export DBID=`ibmcloud cdb about postgresql-demo -a -j | jq -r .resource.id | sed 's/\//%2F/g'`
 $ curl -X POST https://api.eu-de.databases.cloud.ibm.com/v5/ibm/deployments/${DBID}/postgresql/logical_replication_slots   -H 'Authorization: '"${BT}"' \
   -H 'Content-Type: application/json' \
-  -d '{"logical_replication_slot": {"name": "repl_log_postgresql-demo", "database_name": "postgresql-demo", "plugin_type": "wal2json" } }'
+  -d '{"logical_replication_slot": {"name": "repl_log_postgresql-demo", "database_name": "ibmclouddb", "plugin_type": "wal2json" } }'
 
 ----
 
